@@ -26,14 +26,14 @@ model Konaklama {
   musteri   Musteri? @relation(fields: [musteriId], references: [id])
   odaId     String?
   Oda       Oda?     @relation(fields: [odaId], references: [id])
-  odeme     Odeme?   @relation("KonaklamaOdeme")
+  odeme     Odeme?
 }
 
 model Odeme {
   id          String    @id @default(cuid())
   tutar       Float
   konaklamaId String    @unique
-  konaklama   Konaklama @relation("KonaklamaOdeme", fields: [konaklamaId], references: [id])
+  konaklama   Konaklama @relation(fields: [konaklamaId], references: [id])
 }
 
 model Oda {
