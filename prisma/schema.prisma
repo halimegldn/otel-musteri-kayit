@@ -9,12 +9,35 @@ datasource db {
 }
 
 model Musteri {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   ad        String
   soyad     String
-  email     String   @unique
+  email     String      @unique
   telefon   String?
   adres     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  konaklama Konaklama[]
+}
+
+model Konaklama {
+  id        String   @id @default(cuid())
+  musteriId Int?
+  musteri   Musteri? @relation(fields: [musteriId], references: [id])
+  odaId     String?
+  Oda       Oda?     @relation(fields: [odaId], references: [id])
+  odeme     Odeme?   @relation("KonaklamaOdeme")
+}
+
+model Odeme {
+  id          String    @id @default(cuid())
+  tutar       Float
+  konaklamaId String    @unique
+  konaklama   Konaklama @relation("KonaklamaOdeme", fields: [konaklamaId], references: [id])
+}
+
+model Oda {
+  id        String      @id @default(cuid())
+  numara    String
+  konaklama Konaklama[]
 }
