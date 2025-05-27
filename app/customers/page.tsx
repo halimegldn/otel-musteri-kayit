@@ -1,7 +1,11 @@
-import { CustomersTable } from "@/features/customers/components/customers-table";
+import { CustomersCreate } from "@/features/customers/components/customers-create";
+import { getMusteriler } from "@/features/customers/data";
+import { Musteri } from "@/lib/generated/prisma/client";
 
-export default function CustomersPage() {
+export default async function CustomersPage() {
+
+    const musteriler = await getMusteriler();
     return (
-        <CustomersTable />
+        <CustomersCreate />
     )
 }
