@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Musteri {
+  id        Int      @id @default(autoincrement())
+  ad        String
+  soyad     String
+  email     String   @unique
+  telefon   String?
+  adres     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
