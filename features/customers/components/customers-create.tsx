@@ -11,13 +11,14 @@ export function CustomersCreate() {
     return (
         <div>
             <form action={formAction}>
-                <Input type="text" placeholder="Müşteri Adı" />
-                <Input type="text" placeholder="Müşteri Soyadı" />
-                <Input type="email" placeholder="Müşteri Mail" />
-                <Input type="text" placeholder="Müşteri Telefon" />
-                <Input type="text" placeholder="Müşteri Adres" />
+                <Input name="ad" id="ad" type="text" placeholder="Müşteri Adı" />
+                <Input name="soyad" id="soyad" type="text" placeholder="Müşteri Soyadı" />
+                <Input name="email" id="email" type="email" placeholder="Müşteri Mail" />
+                <Input name="telefon" id="telefon" type="text" placeholder="Müşteri Telefon" />
+                <Input name="adres" id="adres" type="text" placeholder="Müşteri Adres" />
                 <Button type="submit">Kaydet</Button>
             </form>
+
         </div>
     )
 }

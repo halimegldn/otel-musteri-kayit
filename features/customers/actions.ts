@@ -22,6 +22,7 @@ export async function createCustomerAction(prevState: any, formData: FormData) {
 
     const { ad, soyad, email, telefon, adres } = validationFields.data;
 
+
     const createdCustomer = await prisma.musteri.create({
         data: {
             ad,
@@ -33,5 +34,4 @@ export async function createCustomerAction(prevState: any, formData: FormData) {
     });
 
     revalidatePath("/");
-
 }

@@ -4,7 +4,6 @@ import { Musteri } from "@/lib/generated/prisma/client";
 
 export default async function CustomersPage() {
 
-    const musteriler = await getMusteriler();
     return (
         <CustomersCreate />
     )
