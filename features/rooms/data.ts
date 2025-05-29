@@ -5,12 +5,12 @@ import { unstable_noStore as noStore } from "next/cache";
 export async function getRooms() {
     noStore();
     try {
-        const odalar = await prisma.oda.findMany({
+        const rooms = await prisma.room.findMany({
             orderBy: {
                 createdAt: "desc"
             }
         })
-        return odalar;
+        return rooms;
     } catch (error) {
         console.log("Error fetching rooms:", error);
     }

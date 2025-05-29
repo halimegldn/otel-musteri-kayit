@@ -4,24 +4,24 @@ import { useActionState, useState } from "react"
 import { createAccomodationAction } from "../actions"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Oda } from "@/lib/generated/prisma";
 import { Button } from "@/components/ui/button";
+import { Room } from "@/lib/generated/prisma";
 
-export function AccomodationCreate({ odalar, musteriId }: { odalar: Oda[], musteriId: string }) {
-    const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(musteriId, formData), null)
-    const [oda, setOda] = useState<string>("");
+export function AccomodationCreate({ rooms, customerId }: { rooms: Room[], customerId: string }) {
+    const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(customerId, formData), null)
+    const [room, setRoom] = useState<string>("");
     return (
         <div>
             <form action={formAction}>
-                <Input id="tutar" name="tutar" type="number" placeholder="Oda tutarı" />
-                <Select name="odaId" value={oda} onValueChange={setOda}>
+                <Input id="price" name="price" type="number" placeholder="Oda tutarı" />
+                <Select name="roomId" value={room} onValueChange={setRoom}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Odalar" />
                     </SelectTrigger>
                     <SelectContent>
                         {
-                            odalar.map((oda) => (
-                                <SelectItem value={oda.id} key={oda.id}>{oda.numara}</SelectItem>
+                            rooms.map((room) => (
+                                <SelectItem value={room.id} key={room.id}>{room.roomNumber}</SelectItem>
                             ))
                         }
                     </SelectContent>

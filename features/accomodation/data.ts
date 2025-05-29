@@ -5,12 +5,12 @@ import { unstable_noStore as noStore } from "next/cache";
 export async function getAccomodations() {
     noStore();
     try {
-        const konaklamalar = await prisma.konaklama.findMany({
+        const stays = await prisma.stay.findMany({
             orderBy: {
                 createdAt: "desc"
             }
         })
-        return konaklamalar;
+        return stays;
     } catch (error) {
         console.log("Error fetching accomodations:", error);
     }

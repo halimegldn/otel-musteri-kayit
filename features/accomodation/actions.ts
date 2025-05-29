@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { AccomodationSchema } from "./schemas";
 import { revalidatePath } from "next/cache";
 
-export async function createAccomodationAction(musteriId: string, formData: FormData) {
+export async function createAccomodationAction(customerId: string, formData: FormData) {
     console.log("Form Data:", formData);
     const validationFields = AccomodationSchema.safeParse({
-        tutar: formData.get("tutar"),
-        odaId: formData.get("odaId"),
+        price: formData.get("price"),
+        roomId: formData.get("roomId"),
     });
 
     if (!validationFields.success) {
@@ -17,13 +17,13 @@ export async function createAccomodationAction(musteriId: string, formData: Form
             message: "Lütfen konaklama bilgilerini eksiksiz doldurun.",
         }
     };
-    const { tutar, odaId } = validationFields.data;
+    const { price, roomId } = validationFields.data;
 
-    const createdAccomodation = await prisma.konaklama.create({
+    const createdAccomodation = await prisma.stay.create({
         data: {
-            tutar,
-            odaId,
-            musteriId: musteriId,
+            price,
+            roomId,
+            customerId: customerId,
         }
     });
     revalidatePath("/");
