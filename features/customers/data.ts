@@ -14,3 +14,18 @@ export async function getCustomers() {
         console.log("Error fetching customers:", error);
     }
 }
+
+export async function getCustomerById(id: string) {
+    noStore();
+    try {
+        const customer = await prisma.customer.findUnique({
+            where: {
+                id: id,
+            }
+        })
+        return customer;
+    } catch (error) {
+        console.log("Error fetching customer by ID:", error);
+        throw new Error("Customer not found");
+    }
+}

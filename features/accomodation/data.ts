@@ -15,3 +15,18 @@ export async function getAccomodations() {
         console.log("Error fetching accomodations:", error);
     }
 }
+
+export async function getStayById(id: string) {
+    noStore();
+
+    try {
+        const stay = await prisma.stay.findUnique({
+            where: {
+                id: id,
+            }
+        })
+    } catch (error) {
+        console.log("Error fetching stay by ID:", error);
+        throw new Error("Stay not found");
+    }
+}

@@ -15,3 +15,19 @@ export async function getRooms() {
         console.log("Error fetching rooms:", error);
     }
 }
+
+export async function getRoomById(id: string) {
+    noStore();
+
+    try {
+        const room = await prisma.room.findUnique({
+            where: {
+                id: id,
+            }
+        })
+        return room;
+    } catch (error) {
+        console.log("Error fetching room by ID:", error);
+        throw new Error("Room not found");
+    }
+}
