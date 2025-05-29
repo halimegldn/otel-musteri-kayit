@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { MusteriSchema } from "./schemas";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function createCustomerAction(prevState: any, formData: FormData) {
@@ -32,6 +33,7 @@ export async function createCustomerAction(prevState: any, formData: FormData) {
             adres,
         }
     });
+    revalidatePath("/create/accomodation");
+    redirect(`/create/accomodation/${createdCustomer.id}`);
 
-    revalidatePath("/");
 }

@@ -2,7 +2,7 @@ import { CustomersCreate } from "@/features/customers/components/customers-creat
 import { getMusteriler } from "@/features/customers/data";
 import { Musteri } from "@/lib/generated/prisma/client";
 
-export default async function CustomersPage() {
+export default function CustomersPage() {
 
     return (
         <CustomersCreate />
