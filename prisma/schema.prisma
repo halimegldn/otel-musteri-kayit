@@ -8,33 +8,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id           String         @id @default(cuid())
-  name         String
-  surname      String
-  email        String         @unique
-  phone        String?
-  address      String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  accomodation Accomodation[]
+model Musteri {
+  id        String      @id @default(cuid())
+  ad        String
+  soyad     String
+  email     String      @unique
+  telefon   String?
+  adres     String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  konaklama Konaklama[]
 }
 
-model Accomodation {
-  id         String    @id @default(cuid())
-  customerId String?
-  customer   Customer? @relation(fields: [customerId], references: [id])
-  roomId     String?
-  price      Float
-  Room       Room?     @relation(fields: [roomId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+model Konaklama {
+  id        String   @id @default(cuid())
+  musteriId String?
+  musteri   Musteri? @relation(fields: [musteriId], references: [id])
+  odaId     String?
+  tutar     Float
+  oda       Oda?     @relation(fields: [odaId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Room {
-  id           String         @id @default(cuid())
-  number       String
-  accomodation Accomodation[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+model Oda {
+  id        String      @id @default(cuid())
+  numara    String
+  konaklama Konaklama[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
