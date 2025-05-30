@@ -1,54 +1,53 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Customer } from "@/lib/generated/prisma";
-import { Edit, Mail, MoreHorizontal, Phone } from "lucide-react";
+import { Stay } from "@/lib/generated/prisma";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { BedDouble, CircleUserRound, Edit, MoreHorizontal, UserIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
-export function MusteriTablosu({ customers }: { customers: Customer[] }) {
+
+export function StayTable({ stays }: { stays: Stay[] }) {
     return (
         <div className="border-t">
             <Table>
-                <TableCaption>Toplam {customers.length} müşteri kaydı bulunmaktadır.</TableCaption>
+                <TableCaption>Toplam {stays.length} konaklama kaydı bulunmaktadır.</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[180px]">Ad Soyad</TableHead>
-                        <TableHead>İletişim Bilgileri</TableHead>
-                        <TableHead>Adres</TableHead>
+                        <TableHead>Konaklama ID</TableHead>
+                        <TableHead>Müşteri</TableHead>
+                        <TableHead>Oda</TableHead>
+                        <TableHead>Tutar</TableHead>
                         <TableHead>Durum</TableHead>
                         <TableHead className="text-right">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {customers.length === 0 ? (
+                    {stays.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                Henüz müşteri kaydı bulunmamaktadır.
+                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                Henüz konaklama kaydı bulunmamaktadır.
                             </TableCell>
                         </TableRow>
                     ) : (
-                        customers.map((customer) => (
-                            <TableRow key={customer.id}>
-                                <TableCell className="font-medium">
-                                    {customer.name} {customer.surname}
-                                </TableCell>
+                        stays.map((stay) => (
+                            <TableRow key={stay.id}>
+                                <TableCell className="font-medium">#{stay.id.substring(0, 8)}</TableCell>
                                 <TableCell>
-                                    <div className="flex flex-col space-y-1">
-                                        <div className="flex items-center gap-1 text-sm">
-                                            <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                                            {customer.email}
-                                        </div>
-                                        <div className="flex items-center gap-1 text-sm">
-                                            <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                                            {customer.phone}
-                                        </div>
+                                    <div className="flex items-center gap-2">
+                                        <CircleUserRound />
+                                        <div className="font-medium">Müşteri {stay.customerId}</div>
                                     </div>
                                 </TableCell>
-                                <TableCell className="max-w-[200px] truncate">
-                                    {customer.address}
-                                </TableCell>
                                 <TableCell>
-                                    <Badge variant="outline" className="bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700">
+                                    <div className="flex items-center gap-1">
+                                        <BedDouble className="h-4 w-4 text-muted-foreground" />
+                                        Oda #{stay.roomId}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="font-medium">₺{stay.price?.toLocaleString()}</TableCell>
+                                <TableCell>
+                                    <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700">
                                         Aktif
                                     </Badge>
                                 </TableCell>
@@ -67,8 +66,8 @@ export function MusteriTablosu({ customers }: { customers: Customer[] }) {
                                                 <Edit className="mr-2 h-4 w-4" />
                                                 Düzenle
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>Konaklamaları Görüntüle</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-600">Sil</DropdownMenuItem>
+                                            <DropdownMenuItem>Müşteriyi Görüntüle</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-red-600">İptal Et</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

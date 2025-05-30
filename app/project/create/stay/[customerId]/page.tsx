@@ -1,4 +1,4 @@
-import { AccomodationCreate } from "@/features/accomodation/components/accomodation-create";
+import { AccomodationCreate } from "@/features/stay/components/stay-create";
 import { getRooms } from "@/features/rooms/data";
 import { Room } from "@/lib/generated/prisma";
 import { get } from "http";

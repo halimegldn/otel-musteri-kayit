@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from "next/cache";
 
-export async function getAccomodations() {
+export async function getStays() {
     noStore();
     try {
         const stays = await prisma.stay.findMany({
