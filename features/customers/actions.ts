@@ -33,7 +33,7 @@ export async function createCustomerAction(prevState: any, formData: FormData) {
             address,
         }
     });
-    revalidatePath("/create/accomodation");
-    redirect(`/create/accomodation/${createdCustomer.id}`);
+    revalidatePath("/project/create/stay");
+    redirect(`/project/create/stay/${createdCustomer.id}`);
 
 }

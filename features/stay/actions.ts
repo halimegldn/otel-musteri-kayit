@@ -26,7 +26,7 @@ export async function createAccomodationAction(customerId: string, formData: For
             customerId: customerId,
         }
     });
-    revalidatePath("/");
+    revalidatePath("/project");
     return {
         success: true,
         message: "Konaklama başarıyla kaydedildi!",
