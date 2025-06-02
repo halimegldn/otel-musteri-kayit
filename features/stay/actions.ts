@@ -1,8 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 import { AccomodationSchema } from "./schemas";
 import { revalidatePath } from "next/cache";
+
 
 export async function createAccomodationAction(customerId: string, formData: FormData) {
     console.log("Form Data:", formData);
@@ -27,6 +29,7 @@ export async function createAccomodationAction(customerId: string, formData: For
         }
     });
     revalidatePath("/project");
+    redirect("/project");
     return {
         success: true,
         message: "Konaklama başarıyla kaydedildi!",

@@ -11,25 +11,27 @@ export function Navbar() {
         <div className="border-b dark:border-white/20 border-black/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="hidden md:flex items-center gap-2">
-                        <BedDouble className="h-6 w-6" />
-                        <span className="font-bold text-lg">Otel Yönetim</span>
-                    </div>
+                    <Link href="/">
+                        <div className="hidden md:flex items-center gap-2">
+                            {/* <BedDouble className="h-6 w-6" /> */}
+                            🏨 <span className="font-bold text-lg">Otel Yönetim</span>
+                        </div>
+                    </Link>
                     <div className="hidden md:flex items-center ml-6 gap-6">
-                        <Link href="/" className="text-sm font-medium">
-                            Ana Sayfa
+                        <Link href="/project" className="text-md font-medium">
+                            Anasayfa
                         </Link>
-                        <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        <Link href="/project/customers" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Müşteriler
                         </Link>
-                        <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            Konaklamalar
+                        <Link href="/project/stays" className="text-md text-muted-foreground hover:text-foreground transition-colors">
+                            Konaklama
                         </Link>
-                        <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        <Link href="#" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Odalar
                         </Link>
-                        <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            Raporlar
+                        <Link href="#" className="text-md text-muted-foreground hover:text-foreground transition-colors">
+                            Rapor
                         </Link>
                     </div>
                 </div>
@@ -42,7 +44,7 @@ export function Navbar() {
 
                     <Button variant="ghost" size="icon">
                         <HelpCircle className="h-5 w-5" />
-                        <span className="sr-only">Help</span>
+                        <span className="sr-only">Yardım</span>
                     </Button>
 
                     <ModeToggle />

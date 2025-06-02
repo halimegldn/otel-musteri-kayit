@@ -5,7 +5,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Customer } from "@/lib/generated/prisma";
 import { Edit, Mail, MoreHorizontal, Phone } from "lucide-react";
 
-export function MusteriTablosu({ customers }: { customers: Customer[] }) {
+export function CustomersTable({ customers }: { customers: Customer[] }) {
     return (
         <div className="border-t">
             <Table>

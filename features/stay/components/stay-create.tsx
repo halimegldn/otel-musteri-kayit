@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Room } from "@/lib/generated/prisma";
+import { Label } from "@/components/ui/label";
 
 export function AccomodationCreate({ rooms, customerId }: { rooms: Room[], customerId: string }) {
     const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(customerId, formData), null)
@@ -13,7 +14,10 @@ export function AccomodationCreate({ rooms, customerId }: { rooms: Room[], custo
     return (
         <div>
             <form action={formAction}>
-                <Input id="price" name="price" type="number" placeholder="Oda tutarı" />
+                <div className="mb-3">
+                    <Label htmlFor="price">Oda Tutarı</Label>
+                    <Input id="price" name="price" type="number" placeholder="Oda tutarı" />
+                </div>
                 <Select name="roomId" value={room} onValueChange={setRoom}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Odalar" />
@@ -26,7 +30,9 @@ export function AccomodationCreate({ rooms, customerId }: { rooms: Room[], custo
                         }
                     </SelectContent>
                 </Select>
-                <Button type="submit">Kaydet</Button>
+                <div>
+                    <Button type="submit">Kaydet</Button>
+                </div>
             </form>
         </div>
     )
