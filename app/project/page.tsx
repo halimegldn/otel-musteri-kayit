@@ -19,14 +19,14 @@ export default async function ProjectHome({ searchParams }: { searchParams: { qu
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <div className="shadow-md rounded-xl p-4">
                     <h2 className="text-xl font-semibold mb-4">Müşteri Listesi</h2>
-                    <CustomersTable customers={customers || []} />
+                    <CustomersTable customers={customers ?? []} />
                 </div>
                 <div className="shadow-md rounded-xl p-4">
                     <h2 className="text-xl font-semibold mb-4">Konaklama Listesi</h2>
                     <StayTable
-                        stays={stays || []}
-                        customers={customers || []}
-                        rooms={roomd || []}
+                        stays={stays ?? []}
+                        customers={customers ?? []}
+                        rooms={roomd ?? []}
                     />
                 </div>
             </div>
