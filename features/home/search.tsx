@@ -22,7 +22,7 @@ export function SearchComponent() {
         }
 
         replace(`${pathname}?${params.toString()}`);
-    }, 300);
+    }, 100);
 
     return (
         <div>
