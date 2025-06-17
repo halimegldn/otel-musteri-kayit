@@ -1,74 +1,121 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Customer } from "@/lib/generated/prisma";
-import { Edit, Mail, MoreHorizontal, Phone } from "lucide-react";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import type { Customer } from "@/lib/generated/prisma"
+import { Edit, Mail, MoreHorizontal, Phone, Trash2, Eye, UserCheck } from "lucide-react"
 
 export function CustomersTable({ customers }: { customers: Customer[] }) {
     return (
-        <div className="border-t">
+        <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white to-blue-50/30 dark:from-slate-800/50 dark:to-blue-900/10 backdrop-blur-sm">
             <Table>
-                <TableCaption>Toplam {customers.length} müşteri kaydı bulunmaktadır.</TableCaption>
+                <TableCaption className="text-slate-600 dark:text-slate-300 font-medium py-4">
+                    <div className="flex items-center justify-center gap-2">
+                        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                        Toplam {customers.length} müşteri kaydı bulunmaktadır.
+                        <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                    </div>
+                </TableCaption>
                 <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[180px]">Ad Soyad</TableHead>
-                        <TableHead>İletişim Bilgileri</TableHead>
-                        <TableHead>Adres</TableHead>
-                        <TableHead>Durum</TableHead>
-                        <TableHead className="text-right">İşlemler</TableHead>
+                    <TableRow className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 border-0">
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200 w-[180px]">Ad Soyad</TableHead>
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">İletişim Bilgileri</TableHead>
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Adres</TableHead>
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Durum</TableHead>
+                        <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {customers.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                Henüz müşteri kaydı bulunmamaktadır.
+                            <TableCell colSpan={5} className="text-center py-12">
+                                <div className="flex flex-col items-center gap-4">
+                                    <div className="p-4 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-full">
+                                        <UserCheck className="h-8 w-8 text-slate-400" />
+                                    </div>
+                                    <p className="text-slate-500 dark:text-slate-400 font-medium">Henüz müşteri kaydı bulunmamaktadır.</p>
+                                </div>
                             </TableCell>
                         </TableRow>
                     ) : (
-                        customers.map((customer) => (
-                            <TableRow key={customer.id}>
-                                <TableCell className="font-medium">
-                                    {customer.name} {customer.surname}
+                        customers.map((customer, index) => (
+                            <TableRow
+                                key={customer.id}
+                                className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/10 dark:hover:to-purple-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
+                            >
+                                <TableCell className="font-semibold text-slate-800 dark:text-slate-200">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                            {customer.name.charAt(0)}
+                                            {customer.surname.charAt(0)}
+                                        </div>
+                                        {customer.name} {customer.surname}
+                                    </div>
                                 </TableCell>
                                 <TableCell>
-                                    <div className="flex flex-col space-y-1">
-                                        <div className="flex items-center gap-1 text-sm">
-                                            <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                                            {customer.email}
+                                    <div className="flex flex-col space-y-2">
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <div className="p-1 bg-blue-100 dark:bg-blue-900/30 rounded">
+                                                <Mail className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                                            </div>
+                                            <span className="text-slate-600 dark:text-slate-300">{customer.email}</span>
                                         </div>
-                                        <div className="flex items-center gap-1 text-sm">
-                                            <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                                            {customer.phone}
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <div className="p-1 bg-green-100 dark:bg-green-900/30 rounded">
+                                                <Phone className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                                            </div>
+                                            <span className="text-slate-600 dark:text-slate-300">{customer.phone}</span>
                                         </div>
                                     </div>
                                 </TableCell>
-                                <TableCell className="max-w-[200px] truncate">
+                                <TableCell className="max-w-[200px] truncate text-slate-600 dark:text-slate-300">
                                     {customer.address}
                                 </TableCell>
                                 <TableCell>
-                                    <Badge variant="outline" className="bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700">
+                                    <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-0 shadow-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-300">
+                                        <div className="w-2 h-2 bg-white rounded-full mr-2"></div>
                                         Aktif
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="hover:bg-gradient-to-r hover:from-slate-100 hover:to-slate-200 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300"
+                                            >
                                                 <MoreHorizontal className="h-4 w-4" />
                                                 <span className="sr-only">İşlemler</span>
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>
-                                                <Edit className="mr-2 h-4 w-4" />
+                                        <DropdownMenuContent
+                                            align="end"
+                                            className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-slate-200 dark:border-slate-700"
+                                        >
+                                            <DropdownMenuLabel className="text-slate-700 dark:text-slate-200 font-semibold">
+                                                İşlemler
+                                            </DropdownMenuLabel>
+                                            <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
+                                            <DropdownMenuItem className="hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-700 dark:text-slate-200">
+                                                <Edit className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400" />
                                                 Düzenle
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>Konaklamaları Görüntüle</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-600">Sil</DropdownMenuItem>
+                                            <DropdownMenuItem className="hover:bg-purple-50 dark:hover:bg-purple-900/20 text-slate-700 dark:text-slate-200">
+                                                <Eye className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                                Konaklamaları Görüntüle
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                Sil
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
