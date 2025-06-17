@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function SearchComponent() {
     const searchParams = useSearchParams();
@@ -16,9 +14,9 @@ export function SearchComponent() {
         const params = new URLSearchParams(searchParams);
 
         if (term) {
-            params.set("query", term);
+            params.set("search", term);
         } else {
-            params.delete("query");
+            params.delete("search");
         }
 
         replace(`${pathname}?${params.toString()}`);
@@ -31,7 +29,7 @@ export function SearchComponent() {
                 type="text"
                 placeholder="Ara"
                 onChange={(e) => handleSearch(e.target.value)}
-                defaultValue={searchParams.get("query")?.toString()}
+                defaultValue={searchParams.get("search")?.toString()}
             />
         </div>
     );

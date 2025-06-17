@@ -1,10 +1,24 @@
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from "next/cache";
 
+function buildFilters(params: Record<string, string | any>): any {
+    const filters: any = {};
+    if (params.name) {
+        filters.name = { contains: params.name, mode: "instentive" };
+    }
+    if (params.surname) {
+        filters.surname = { contains: params.surname, mode: "instentive" };
+    }
+    if (params.email) {
+        filters.email = { contains: params.email, mode: "instentive" };
+    }
+    return filters;
+}
+
 export async function getCustomers(search?: string, filters: Record<string, any> = {}) {
     noStore();
     try {
-        const baseWhere: any = { ...filters };
+        const baseWhere: any = { ...buildFilters(filters) };
         if (search && search.trim() !== "") {
             baseWhere.OR = [
                 { name: { contains: search, mode: "insensitive" } },
