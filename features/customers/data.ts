@@ -4,13 +4,13 @@ import { unstable_noStore as noStore } from "next/cache";
 function buildFilters(params: Record<string, string | any>): any {
     const filters: any = {};
     if (params.name) {
-        filters.name = { contains: params.name, mode: "instentive" };
+        filters.name = { contains: params.name, mode: "insensitive" };
     }
     if (params.surname) {
-        filters.surname = { contains: params.surname, mode: "instentive" };
+        filters.surname = { contains: params.surname, mode: "insensitive" };
     }
     if (params.email) {
-        filters.email = { contains: params.email, mode: "instentive" };
+        filters.email = { contains: params.email, mode: "insensitive" };
     }
     return filters;
 }

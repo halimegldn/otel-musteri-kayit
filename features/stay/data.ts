@@ -11,7 +11,7 @@ function buildStayFilters(params: Record<string, string | any>): any {
     if (params.roomNumber) {
         filters.room = {
             roomNumber: {
-                contains: filters.roomNumber, mode: "insensitive"
+                contains: params.roomNumber, mode: "insensitive"
             }
         };
     }
