@@ -64,24 +64,55 @@ export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: s
                                 </div>
                                 Oda Seçimi
                             </Label>
-
-                            <Select name="roomId" value={room} onValueChange={setRoom}>
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Odalar" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {
-                                        rooms.map((room) => (
-                                            <SelectItem value={room.id} key={room.id}>{room.roomNumber}</SelectItem>
-                                        ))
-                                    }
-                                </SelectContent>
-                            </Select>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {rooms.map((room) => (
+                                    <div key={room.id} className="relative">
+                                        <Input
+                                            type="radio"
+                                            id={`room-${room.id}`}
+                                            name="roomId"
+                                            value={room.id}
+                                            checked={selectedRoom === room.id}
+                                            onChange={(e) => setSelectedRoom(e.target.value)}
+                                            className="sr-only"
+                                        />
+                                        <Label
+                                            htmlFor={`room-${room.id}`}
+                                            className={`
+                                                block p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105
+                                                ${selectedRoom === room.id
+                                                    ? "border-emerald-500 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 shadow-lg"
+                                                    : "border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-800/50 hover:border-emerald-300 dark:hover:border-emerald-600"
+                                                }
+                                            `}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex justify-between items-center gap-5">
+                                                        <BedDouble />
+                                                        <div>
+                                                            <div className="font-bold text-slate-800 dark:text-slate-200">Oda {room.roomNumber}</div>
+                                                            <div className="text-sm text-slate-500 dark:text-slate-400">Standart Oda</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {selectedRoom === room.id && (
+                                                    <div className="text-emerald-500">
+                                                        <CheckCircle2 className="h-6 w-6" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+
                         {/* Submit Button */}
                         <div className="pt-4">
                             <Button
                                 type="submit"
+                                disabled={!selectedRoom}
                                 className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:from-slate-400 disabled:to-slate-500 text-white border-0 shadow-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] py-3 text-lg font-semibold disabled:transform-none disabled:cursor-not-allowed"
                             >
                                 <BedDouble className="mr-2 h-5 w-5" />
@@ -89,15 +120,6 @@ export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: s
                             </Button>
                         </div>
                     </form>
-                </div>
-
-                {/* Footer */}
-                <div className="bg-gradient-to-r from-slate-50 to-emerald-50/50 dark:from-slate-800/50 dark:to-emerald-900/10 p-4 border-t border-slate-200/50 dark:border-slate-700/50">
-                    <div className="flex items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                        <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div>
-                        Oda seçimi ve tutar bilgisi zorunludur
-                        <div className="w-2 h-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"></div>
-                    </div>
                 </div>
             </div>
         </div>
