@@ -1,12 +1,37 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { Customer, Room, Stay } from "@/lib/generated/prisma"
 import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign } from "lucide-react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useState } from "react"
+import { updateStayAction } from "../actions";
+import { Input } from "@/components/ui/input";
 
 
 export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customers: Customer[]; rooms: Room[] }) {
+
+    const [editStayId, setEditStayId] = useState<string | null>();
+    const [stayPrice, setStayPrice] = useState(0);
+    const [stayRoomNumber, setStayRoomNumber] = useState("");
+
+    const updateClick = async (customerId: string) => {
+        const selectedRoom = rooms.find((room) => room.roomNumber === stayRoomNumber) // roomNumber eğer stayRoomNumber değerine eşitse bul ve selectedRoom'a ata
+
+        const formData = new FormData();
+        formData.set("price", stayPrice.toString());
+        formData.set("roomId", selectedRoom?.id || "");
+
+        try {
+            await updateStayAction(customerId, null, formData);
+            setEditStayId(null);
+        } catch (error) {
+
+        }
+    }
+
     return (
         <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800/50 dark:to-emerald-900/10 backdrop-blur-sm">
             <Table>
@@ -23,7 +48,6 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Müşteri</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tutar</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Durum</TableHead>
                         <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -44,9 +68,37 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                     ) : (
                         stays.map((stay) => {
                             const customerName = customers.find((customer) => customer.id === stay.customerId)
-                            const roomNumber = rooms.find((room) => room.id === stay.roomId)
+                            const roomNumberState = rooms.find((room) => room.id === stay.roomId)
                             return (
-                                <TableRow
+                                editStayId === stay.id ? (
+                                    <TableRow
+                                        key={stay.id}
+                                        className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
+                                    >
+                                        <TableCell colSpan={5} className="font-semibold text-slate-800 dark:text-slate-200">
+                                            <form
+                                                onSubmit={(e) => {
+                                                    e.preventDefault();
+                                                    updateClick(stay.id);
+                                                }}
+                                                className="flex items-center gap-4"
+                                            >
+                                                <Input
+                                                    value={stayPrice}
+                                                    onChange={(e) => setStayPrice(Number(e.target.value))}
+                                                />
+                                                <Input
+                                                    value={stayRoomNumber}
+                                                    onChange={(e) => setStayRoomNumber(e.target.value)}
+                                                />
+                                                <Button
+                                                    onClick={() => setEditStayId(null)}>İptal
+                                                </Button>
+                                                <Button type="submit">Kaydet</Button>
+                                            </form>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (<TableRow
                                     key={stay.id}
                                     className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
                                 >
@@ -78,7 +130,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                             </div>
                                             <div>
                                                 <div className="font-semibold text-slate-800 dark:text-slate-200">
-                                                    Oda {roomNumber?.roomNumber}
+                                                    Oda {roomNumberState?.roomNumber}
                                                 </div>
                                                 <div className="text-sm text-slate-500 dark:text-slate-400">Standart</div>
                                             </div>
@@ -93,12 +145,6 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                                 ₺{stay.price?.toLocaleString()}
                                             </span>
                                         </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0 shadow-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300">
-                                            <div className="w-2 h-2 bg-white rounded-full mr-2"></div>
-                                            Aktif
-                                        </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
@@ -120,7 +166,15 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                                     İşlemler
                                                 </DropdownMenuLabel>
                                                 <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
-                                                <DropdownMenuItem className="hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-700 dark:text-slate-200">
+                                                <DropdownMenuItem
+
+                                                    onClick={() => {
+                                                        setEditStayId(stay.id);
+                                                        setStayPrice(stay.price);
+                                                        setStayRoomNumber(roomNumberState?.roomNumber || "");
+                                                    }}
+
+                                                    className="hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-700 dark:text-slate-200">
                                                     <Edit className="mr-2 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                                                     Düzenle
                                                 </DropdownMenuItem>
@@ -135,12 +189,13 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
-                                </TableRow>
+                                </TableRow>)
+
                             )
                         })
                     )}
                 </TableBody>
             </Table>
-        </div>
+        </div >
     )
 }

@@ -2,13 +2,13 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { AccomodationSchema } from "./schemas";
+import { StaySchema } from "./schemas";
 import { revalidatePath } from "next/cache";
 
 
 export async function createAccomodationAction(customerId: string, formData: FormData) {
     console.log("Form Data:", formData);
-    const validationFields = AccomodationSchema.safeParse({
+    const validationFields = StaySchema.safeParse({
         price: formData.get("price"),
         roomId: formData.get("roomId"),
     });
@@ -35,4 +35,35 @@ export async function createAccomodationAction(customerId: string, formData: For
         message: "Konaklama başarıyla kaydedildi!",
         data: createdAccomodation,
     }
+}
+
+export async function updateStayAction(id: string, prevState: null, formData: FormData) {
+    const validationFields = StaySchema.safeParse({
+        price: formData.get("price"),
+        roomId: formData.get("roomId")
+    });
+
+    if (!validationFields.success) {
+        return {
+            errors: validationFields.error.flatten().fieldErrors,
+            message: "Eksik alanlar mevcut. Konaklama güncellenemedi."
+        };
+    };
+
+    const { price, roomId } = validationFields.data;
+
+    try {
+        await prisma.stay.update({
+            where: { id },
+            data: {
+                price,
+                roomId
+            }
+        })
+    } catch (error) {
+        return {
+            message: `Hata konaklama güncellenemedi. ${error}`,
+        }
+    }
+    revalidatePath("/project/stays")
 }
