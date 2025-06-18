@@ -90,7 +90,6 @@ export default async function ProjectHome({
                             <CustomersTable customers={customers ?? []} />
                         </CardContent>
                     </Card>
-
                     {/* Stays Table */}
                     <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden bg-white/90 dark:bg-slate-700/50 backdrop-blur-sm">
                         <div className="h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
