@@ -1,4 +1,4 @@
-import { AccomodationCreate } from "@/features/stay/components/stay-create";
+import { StayCreate } from "@/features/stay/components/stay-create";
 import { getRooms } from "@/features/rooms/data";
 import { Room } from "@/lib/generated/prisma";
 import { get } from "http";
@@ -9,7 +9,7 @@ export default async function KonaklamaPage({ params }: { params: { customerId: 
     const customerId = await params.customerId;
     return (
         <div>
-            <AccomodationCreate rooms={rooms} customerId={customerId} />
+            <StayCreate rooms={rooms} customerId={customerId} />
         </div>
     )
 }
