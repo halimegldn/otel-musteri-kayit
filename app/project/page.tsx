@@ -72,7 +72,7 @@ export default async function ProjectHome({
                 </Card>
 
                 {/* Main Content */}
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <div className="flex flex-col gap-8">
                     {/* Customers Table */}
                     <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden bg-white/90 dark:bg-slate-700/50 backdrop-blur-sm">
                         <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
