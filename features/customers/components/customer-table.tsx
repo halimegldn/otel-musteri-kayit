@@ -12,16 +12,18 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 export function CustomersTable({ customers }: { customers: Customer[] }) {
 
     const [editCustomer, setEditCustomer] = useState<string | null>(null)
-    const [customerName, setCustomerName] = useState("");
-    const [customerSurname, setCustomerSurname] = useState("");
+    const [customerFullName, setCustomerFullName] = useState("");
     const [customerMail, setCustomerMail] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [customerAddress, setCustomerAddress] = useState("");
 
+    const [customerName, ...res] = customerFullName.trim().split(" ");
+    const customerSurname = res.join(" ");
+
     const updateClick = async (customerId: string) => {
         const formData = new FormData();
-        formData.set("name", customerName);
-        formData.set("surname", customerSurname);
+        formData.set("name", customerName || "");
+        formData.set("surname", customerSurname || "");
         formData.set("email", customerMail);
         formData.set("phone", customerPhone);
         formData.set("address", customerAddress);
@@ -84,14 +86,14 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
                                                 className="flex items-center gap-4"
                                             >
                                                 <Input
-                                                    value={customerName}
-                                                    onChange={(e) => setCustomerName(e.target.value)}
-                                                    className="w-[200px]"
+                                                    value={customerFullName}
+                                                    onChange={(e) => setCustomerFullName(e.target.value)}
+                                                // className="w-[200px]"
                                                 />
-                                                <Input
+                                                {/* <Input
                                                     value={customerSurname}
                                                     onChange={(e) => setCustomerSurname(e.target.value)}
-                                                />
+                                                /> */}
                                                 <Input
                                                     value={customerMail}
                                                     onChange={(e) => setCustomerMail(e.target.value)}
@@ -170,8 +172,7 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
                                                     <DropdownMenuItem
                                                         onClick={() => {
                                                             setEditCustomer(customer.id)
-                                                            setCustomerName(customer.name)
-                                                            setCustomerSurname(customer.surname)
+                                                            setCustomerFullName(`${customer.name} ${customer.surname}`)
                                                             setCustomerMail(customer.email)
                                                             setCustomerPhone(customer.phone ?? "")
                                                             setCustomerAddress(customer.address ?? "")
