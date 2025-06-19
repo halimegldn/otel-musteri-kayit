@@ -25,13 +25,14 @@ export default async function ProjectHome({
     const rooms = await getRooms()
 
     const filters = {
-        name: (await searchParams).name || undefined,
-        surname: (await searchParams).surname || undefined,
-        email: (await searchParams).email || undefined,
-        customerId: (await searchParams).customerId || undefined,
-        roomNumber: (await searchParams).roomNumber || undefined,
+        name: searchParams.name || undefined,
+        surname: searchParams.surname || undefined,
+        email: searchParams.email || undefined,
+        customerId: searchParams.customerId || undefined,
+        roomNumber: searchParams.roomNumber || undefined,
         price: searchParams.price ? Number(searchParams.price) : undefined,
     }
+
 
     const customers = await getCustomers(searchQuery, filters)
     const stays = await getStays(searchQuery, filters)
@@ -87,7 +88,8 @@ export default async function ProjectHome({
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-6">
-                            <CustomersTable customers={customers ?? []} />
+                            <CustomersTable customers={customers ?? []} customerId={filters.customerId ?? ""} />
+                            {/* <CustomersTable customers={customers ?? []} customerId={customerId} /> */}
                         </CardContent>
                     </Card>
                     {/* Stays Table */}

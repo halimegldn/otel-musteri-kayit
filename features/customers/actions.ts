@@ -73,3 +73,26 @@ export async function updateCustomerAction(id: string, prevState: any, formData:
     }
     revalidatePath("/project/customers")
 }
+
+export async function deleteCustomerAction(customerId: string | null) {
+    if (!customerId) {
+        return {
+            success: false, message: "Geçersiz müşteri id"
+        }
+    }
+    try {
+        await prisma.stay.deleteMany({
+            where: { customerId: customerId }
+        })
+        await prisma.customer.delete({
+            where: { id: customerId }
+        });
+
+        revalidatePath("/project/customers");
+
+    } catch (error) {
+        return {
+            success: false, message: "Müşteri silinemedi"
+        }
+    }
+}

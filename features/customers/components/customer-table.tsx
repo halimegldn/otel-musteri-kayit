@@ -8,8 +8,9 @@ import type { Customer } from "@/lib/generated/prisma"
 import { Edit, Mail, MoreHorizontal, Phone, Trash2, Eye, UserCheck } from "lucide-react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+import { DeleteCustomer } from "@/features/home/delete-customer";
 
-export function CustomersTable({ customers }: { customers: Customer[] }) {
+export function CustomersTable({ customers, customerId }: { customers: Customer[], customerId: string }) {
 
     const [editCustomer, setEditCustomer] = useState<string | null>(null)
     const [customerFullName, setCustomerFullName] = useState("");
@@ -186,8 +187,7 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
                                                         Konaklamaları Görüntüle
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Sil
+                                                        <DeleteCustomer customerId={customer.id} />
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
