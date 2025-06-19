@@ -11,6 +11,8 @@ export async function createAccomodationAction(customerId: string, formData: For
     const validationFields = StaySchema.safeParse({
         price: formData.get("price"),
         roomId: formData.get("roomId"),
+        checkin: formData.get("startDate"),
+        checkout: formData.get("endDate"),
     });
 
     if (!validationFields.success) {
@@ -19,12 +21,14 @@ export async function createAccomodationAction(customerId: string, formData: For
             message: "Lütfen konaklama bilgilerini eksiksiz doldurun.",
         }
     };
-    const { price, roomId } = validationFields.data;
+    const { price, roomId, checkin, checkout } = validationFields.data;
 
     const createdAccomodation = await prisma.stay.create({
         data: {
             price,
             roomId,
+            checkin,
+            checkout,
             customerId: customerId,
         }
     });

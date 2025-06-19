@@ -27,6 +27,8 @@ model Stay {
   roomId     String?
   price      Float
   room       Room?     @relation(fields: [roomId], references: [id])
+  checkin    DateTime
+  checkout   DateTime
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 }

@@ -7,12 +7,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Room } from "@/lib/generated/prisma";
 import { Label } from "@/components/ui/label";
-import { BedDouble, CheckCircle2, DollarSign, Home, Plus } from "lucide-react";
+import { BedDouble, Calendar1Icon, CheckCircle2, DollarSign, Home, Plus } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: string }) {
     const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(customerId, formData), null)
     const [room, setRoom] = useState<string>("");
     const [selectedRoom, setSelectedRoom] = useState("");
+    const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+
+
     return (
         <div className="max-w-4xl mx-auto p-6">
             <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800/50 dark:to-emerald-900/10 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
@@ -107,7 +114,79 @@ export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: s
                                 ))}
                             </div>
                         </div>
+                        {/* Kayıt Tarih Aralığı */}
+                        <div className="space-y-2">
+                            <Label
+                                htmlFor="date-range"
+                                className="text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-2"
+                            >
+                                <div className="p-1 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded">
+                                    <Calendar1Icon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                Kayıt Tarih Aralığı
+                            </Label>
 
+                            <div className="relative">
+                                {/* Hidden input’larımız burada kalacak */}
+                                {dateRange?.from && dateRange.to && (
+                                    <>
+                                        <input type="hidden" name="startDate" value={dateRange.from.toISOString()} />
+                                        <input type="hidden" name="endDate" value={dateRange.to.toISOString()} />
+                                    </>
+                                )}
+
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <button
+                                            id="date-range"
+                                            type="button"
+                                            className={`
+            w-full text-left pl-10 pr-3 py-2 rounded-lg border
+            bg-white/50 dark:bg-slate-800/50
+            border-slate-200 dark:border-slate-600
+            focus:border-emerald-500 focus:ring-emerald-500/20
+            transition-all duration-300
+            ${!dateRange?.from || !dateRange.to
+                                                    ? "text-slate-400 dark:text-slate-500"
+                                                    : "text-slate-800 dark:text-slate-200"}
+          `}
+                                        >
+                                            {dateRange?.from && dateRange.to
+                                                ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
+                                                : "Tarih Aralığı Seçin"}
+                                        </button>
+                                    </PopoverTrigger>
+
+                                    <PopoverContent className="w-auto p-0">
+                                        <Calendar
+                                            mode="range"
+                                            selected={dateRange}
+                                            onSelect={setDateRange}
+                                            className="rounded-lg border"
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <Calendar1Icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {dateRange?.from && dateRange.to && (
+                            <>
+                                <input
+                                    type="hidden"
+                                    name="startDate"
+                                    value={dateRange.from.toISOString()}
+                                />
+                                <input
+                                    type="hidden"
+                                    name="endDate"
+                                    value={dateRange.to.toISOString()}
+                                />
+                            </>
+                        )}
                         {/* Submit Button */}
                         <div className="pt-4">
                             <Button
