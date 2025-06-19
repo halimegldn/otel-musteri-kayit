@@ -3,12 +3,16 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { Customer, Room, Stay } from "@/lib/generated/prisma"
-import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign } from "lucide-react"
+import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign, Calendar1Icon } from "lucide-react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useState } from "react"
 import { updateStayAction } from "../actions";
+import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
+import { DateRange } from "react-day-picker";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 
 export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customers: Customer[]; rooms: Room[] }) {
@@ -16,6 +20,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
     const [editStayId, setEditStayId] = useState<string | null>();
     const [stayPrice, setStayPrice] = useState(0);
     const [stayRoomNumber, setStayRoomNumber] = useState("");
+    const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
 
     const updateClick = async (customerId: string) => {
         const selectedRoom = rooms.find((room) => room.roomNumber === stayRoomNumber) // roomNumber eğer stayRoomNumber değerine eşitse bul ve selectedRoom'a ata
@@ -23,6 +28,12 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
         const formData = new FormData();
         formData.set("price", stayPrice.toString());
         formData.set("roomId", selectedRoom?.id || "");
+        if (dateRange?.from) {
+            formData.set("checkin", dateRange.from.toISOString());
+        }
+        if (dateRange?.to) {
+            formData.set("checkout", dateRange.to.toISOString());
+        }
 
         try {
             await updateStayAction(customerId, null, formData);
@@ -48,6 +59,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Müşteri</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tutar</TableHead>
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tarih</TableHead>
                         <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -91,6 +103,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                                     value={stayRoomNumber}
                                                     onChange={(e) => setStayRoomNumber(e.target.value)}
                                                 />
+                                                {/* Buraya tarih editleme eklenecek */}
                                                 <Button
                                                     onClick={() => setEditStayId(null)}>İptal
                                                 </Button>
@@ -144,6 +157,25 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                             <span className="font-bold text-lg bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
                                                 ₺{stay.price?.toLocaleString()}
                                             </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-lg">
+                                                <Calendar1Icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div className="font-semibold text-slate-800 dark:text-slate-200">
+                                                    {stay.checkin
+                                                        ? format(new Date(stay.checkin), "dd.MM.yyyy")
+                                                        : "-"}
+                                                </div>
+                                                <div className="text-sm text-slate-500 dark:text-slate-400">
+                                                    {stay.checkout
+                                                        ? format(new Date(stay.checkout), "dd.MM.yyyy")
+                                                        : "-"}
+                                                </div>
+                                            </div>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">

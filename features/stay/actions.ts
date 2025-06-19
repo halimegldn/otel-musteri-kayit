@@ -42,6 +42,7 @@ export async function createAccomodationAction(customerId: string, formData: For
 }
 
 export async function updateStayAction(id: string, prevState: null, formData: FormData) {
+    // Buraya tarih eklenecek
     const validationFields = StaySchema.safeParse({
         price: formData.get("price"),
         roomId: formData.get("roomId")
