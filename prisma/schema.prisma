@@ -24,8 +24,8 @@ model Stay {
   id         String    @id @default(cuid())
   customerId String?
   customer   Customer? @relation(fields: [customerId], references: [id])
-  roomId     String?
   price      Float
+  roomId     String?   @unique
   room       Room?     @relation(fields: [roomId], references: [id])
   checkin    DateTime
   checkout   DateTime
@@ -36,7 +36,7 @@ model Stay {
 model Room {
   id         String   @id @default(cuid())
   roomNumber String
-  stay       Stay[]
+  stay       Stay?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

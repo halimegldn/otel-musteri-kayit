@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { create } from "domain";
 import { unstable_noStore as noStore } from "next/cache";
 
 export async function getRooms() {
@@ -11,6 +10,23 @@ export async function getRooms() {
             }
         })
         return rooms;
+    } catch (error) {
+        console.log("Error fetching rooms:", error);
+    }
+}
+
+export async function getAvailableRooms() {
+    noStore();
+    try {
+        const avilableRooms = await prisma.room.findMany({
+            where: {
+                stay: null
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        })
+        return avilableRooms;
     } catch (error) {
         console.log("Error fetching rooms:", error);
     }

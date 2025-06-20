@@ -13,7 +13,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
-export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: string }) {
+export function StayCreate({ avilableRooms, customerId }: { avilableRooms: Room[], customerId: string }) {
     const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(customerId, formData), null)
     const [room, setRoom] = useState<string>("");
     const [selectedRoom, setSelectedRoom] = useState("");
@@ -72,7 +72,7 @@ export function StayCreate({ rooms, customerId }: { rooms: Room[], customerId: s
                                 Oda Seçimi
                             </Label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {rooms.map((room) => (
+                                {avilableRooms.map((room) => (
                                     <div key={room.id} className="relative">
                                         <Input
                                             type="radio"
