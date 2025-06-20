@@ -87,54 +87,78 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                         key={stay.id}
                                         className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
                                     >
-                                        <TableCell colSpan={5} className="font-semibold text-slate-800 dark:text-slate-200">
+                                        <TableCell colSpan={6} className="py-6">
                                             <form
                                                 onSubmit={(e) => {
                                                     e.preventDefault();
                                                     updateClick(stay.id);
                                                 }}
-                                                className="flex items-center gap-4"
+                                                className="flex flex-wrap gap-4 items-center justify-between"
                                             >
-                                                <Input
-                                                    value={stayPrice}
-                                                    onChange={(e) => setStayPrice(Number(e.target.value))}
-                                                />
-                                                <Input
-                                                    value={stayRoomNumber}
-                                                    onChange={(e) => setStayRoomNumber(e.target.value)}
-                                                />
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <button
-                                                            id="date-range"
-                                                            type="button"
-                                                            className={` w-full text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
-                                                 dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!dateRange?.from || !dateRange.to
-                                                                    ? "text-slate-400 dark:text-slate-500"
-                                                                    : "text-slate-800 dark:text-slate-200"}`}
-                                                        >
-                                                            {dateRange?.from && dateRange.to
-                                                                ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
-                                                                : "Tarih Aralığı Seçin"}
-                                                        </button>
-                                                    </PopoverTrigger>
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Tutar (₺)</label>
+                                                    <Input
+                                                        value={stayPrice}
+                                                        onChange={(e) => setStayPrice(Number(e.target.value))}
+                                                        className="w-36"
+                                                    />
+                                                </div>
 
-                                                    <PopoverContent className="w-auto p-0">
-                                                        <Calendar
-                                                            mode="range"
-                                                            selected={dateRange}
-                                                            onSelect={setDateRange}
-                                                            className="rounded-lg border"
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <Button
-                                                    onClick={() => setEditStayId(null)}>İptal
-                                                </Button>
-                                                <Button type="submit">Kaydet</Button>
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Oda Numarası</label>
+                                                    <Input
+                                                        value={stayRoomNumber}
+                                                        onChange={(e) => setStayRoomNumber(e.target.value)}
+                                                        className="w-36"
+                                                    />
+                                                </div>
+
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Tarih Aralığı</label>
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <button
+                                                                id="date-range"
+                                                                type="button"
+                                                                className={`min-w-[220px] text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
+                                                                          dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!dateRange?.from || !dateRange.to
+                                                                        ? "text-slate-400 dark:text-slate-500"
+                                                                        : "text-slate-800 dark:text-slate-200"
+                                                                    }`}
+                                                            >
+                                                                {dateRange?.from && dateRange.to
+                                                                    ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
+                                                                    : "Tarih Aralığı Seçin"}
+                                                            </button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-auto p-0 mt-2">
+                                                            <Calendar
+                                                                mode="range"
+                                                                selected={dateRange}
+                                                                onSelect={setDateRange}
+                                                                className="rounded-lg border"
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                </div>
+
+                                                <div className="flex gap-2 mt-6">
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={() => setEditStayId(null)}
+                                                        className="rounded-lg"
+                                                    >
+                                                        İptal
+                                                    </Button>
+                                                    <Button type="submit" className="rounded-lg">
+                                                        Kaydet
+                                                    </Button>
+                                                </div>
                                             </form>
                                         </TableCell>
                                     </TableRow>
+
                                 ) : (<TableRow
                                     key={stay.id}
                                     className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
