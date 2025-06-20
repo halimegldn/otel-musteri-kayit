@@ -103,7 +103,31 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                                     value={stayRoomNumber}
                                                     onChange={(e) => setStayRoomNumber(e.target.value)}
                                                 />
-                                                {/* Buraya tarih editleme eklenecek */}
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <button
+                                                            id="date-range"
+                                                            type="button"
+                                                            className={` w-full text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
+                                                 dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!dateRange?.from || !dateRange.to
+                                                                    ? "text-slate-400 dark:text-slate-500"
+                                                                    : "text-slate-800 dark:text-slate-200"}`}
+                                                        >
+                                                            {dateRange?.from && dateRange.to
+                                                                ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
+                                                                : "Tarih Aralığı Seçin"}
+                                                        </button>
+                                                    </PopoverTrigger>
+
+                                                    <PopoverContent className="w-auto p-0">
+                                                        <Calendar
+                                                            mode="range"
+                                                            selected={dateRange}
+                                                            onSelect={setDateRange}
+                                                            className="rounded-lg border"
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
                                                 <Button
                                                     onClick={() => setEditStayId(null)}>İptal
                                                 </Button>

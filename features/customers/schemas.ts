@@ -6,5 +6,4 @@ export const CusotmerSchema = z.object({
     email: z.string().email("Geçerli bir e-posta giriniz."),
     phone: z.string().min(10, "Telefon numarası en az 10 karakter olmalı."),
     address: z.string().min(1, "Adres alanı boş bırakılamaz."),
-
 })

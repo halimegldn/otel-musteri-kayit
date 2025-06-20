@@ -45,7 +45,10 @@ export async function updateStayAction(id: string, prevState: null, formData: Fo
     // Buraya tarih eklenecek
     const validationFields = StaySchema.safeParse({
         price: formData.get("price"),
-        roomId: formData.get("roomId")
+        roomId: formData.get("roomId"),
+        checkin: formData.get("checkin"),
+        checkout: formData.get("checkout"),
+
     });
 
     if (!validationFields.success) {
@@ -55,14 +58,16 @@ export async function updateStayAction(id: string, prevState: null, formData: Fo
         };
     };
 
-    const { price, roomId } = validationFields.data;
+    const { price, roomId, checkin, checkout } = validationFields.data;
 
     try {
         await prisma.stay.update({
             where: { id },
             data: {
                 price,
-                roomId
+                roomId,
+                checkin,
+                checkout,
             }
         })
     } catch (error) {
