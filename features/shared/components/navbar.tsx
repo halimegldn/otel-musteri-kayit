@@ -27,7 +27,7 @@ export function Navbar() {
                         <Link href="/project/stays" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Konaklama
                         </Link>
-                        <Link href="#" className="text-md text-muted-foreground hover:text-foreground transition-colors">
+                        <Link href="/project/rooms" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Odalar
                         </Link>
                         <Link href="#" className="text-md text-muted-foreground hover:text-foreground transition-colors">
