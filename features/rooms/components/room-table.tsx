@@ -11,7 +11,7 @@ import { se } from "date-fns/locale";
 import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Star } from "lucide-react";
 
 export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: Stay[]; roomImages: RoomImages[] }) {
 
@@ -32,6 +32,7 @@ export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: 
 
                 const selectedRange = dateRange[room.id] || defaultDateRange
                 const images = roomImages.filter((image) => image.roomId === room.id)
+                const roomPrice = stays.find((stay) => stay.roomId === room.id)?.price || 0;
                 return (
                     <Card key={room.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div className="relative">
@@ -68,28 +69,32 @@ export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: 
                                 <CarouselNext className="right-2" />
                             </Carousel>
                         </div>
-
                         <CardHeader>
                             <div className="flex justify-between items-start">
-                                <CardTitle className="text-xl">Oda {room.roomNumber}</CardTitle>
+                                <CardTitle className="text-xl">ODA {room.roomNumber}</CardTitle>
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-600 dark:text-green-500">${roomPrice}</div>
+                                </div>
                             </div>
-                            <CardDescription className="text-gray-600">Card Description</CardDescription>
+                            <CardDescription className="text-gray-600">Otel Odası</CardDescription>
                         </CardHeader>
-                        <CardFooter className="flex flex-col items-start gap-4">
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 min-w-[220px]">
-                                <CalendarIcon className="w-4 h-4 text-slate-500" />
-                                <span className="text-sm text-slate-800 dark:text-slate-200">
-                                    {selectedRange?.from && selectedRange.to
-                                        ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
-                                        : "Tarih Aralığı Yok"}
-                                </span>
+                        <CardContent>
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-zinc-800/70 min-w-[220px]">
+                                    <CalendarIcon className="w-4 h-4 text-zinc-500" />
+                                    <span className="text-sm text-slate-800 dark:text-slate-200">
+                                        {selectedRange?.from && selectedRange.to
+                                            ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
+                                            : "Tarih Aralığı Yok"}
+                                    </span>
+                                </div>
+                                <div className="flex flex-wrap gap-3 pt-2">
+                                    <Badge variant="outline" className="text-xs">
+                                        {room.customerNumber} Kişilik
+                                    </Badge>
+                                </div>
                             </div>
-                            <div className="text-left">
-                                <Badge variant="outline" className="text-xs">
-                                    {room.customerNumber} Kişilik
-                                </Badge>
-                            </div>
-                        </CardFooter>
+                        </CardContent>
                     </Card>
                 )
             })}
