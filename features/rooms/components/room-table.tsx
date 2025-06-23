@@ -9,6 +9,8 @@ import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { se } from "date-fns/locale";
 import Image from "next/image";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Badge } from "@/components/ui/badge";
 
 export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: Stay[]; roomImages: RoomImages[] }) {
 
@@ -16,79 +18,95 @@ export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: 
 
     return (
         <div className="grid grid-cols-3 gap-10 px-32 py-10">
-            {
-                rooms.map((room) => {
-                    const roomDate = stays.find((stay) => stay.roomId === room.id);
+            {rooms.map((room) => {
+                const roomDate = stays.find((stay) => stay.roomId === room.id)
 
-                    // Bu alan stay tablsounun checkin-checkout değerlerini almak için roomDate id değerine göre çekildi ve roomDate from kısmı checkin to kısmı checkout a atıyor.
-                    const defaultDateRange: DateRange | undefined = roomDate
-                        ? {
-                            from: new Date(roomDate.checkin),
-                            to: new Date(roomDate.checkout),
-                        }
-                        : undefined;
+                // Bu alan stay tablsounun checkin-checkout değerlerini almak için roomDate id değerine göre çekildi ve roomDate from kısmı checkin to kısmı checkout a atıyor.
+                const defaultDateRange: DateRange | undefined = roomDate
+                    ? {
+                        from: new Date(roomDate.checkin),
+                        to: new Date(roomDate.checkout),
+                    }
+                    : undefined
 
-                    const selectedRange = dateRange[room.id] || defaultDateRange;
-                    const images = roomImages.filter((image) => image.roomId === room.id);
-                    return (
-                        <Card key={room.id} className="w-5/6">
-                            <CardHeader>
-                                <CardTitle>Card Title</CardTitle>
-                                <CardDescription>Card Description</CardDescription>
-                                <CardAction>Card Action</CardAction>
-                            </CardHeader>
-                            <CardContent>
-                                <p>{room.roomNumber}</p>
-                                {
-                                    images.length > 0 ? (
-
-                                        images.map((img) => (
-                                            <Image
-                                                key={img.id}
-                                                src={img.imageUrl}
-                                                alt={img.id}
-                                                width={300}
-                                                height={200}
-                                                className="rounded-lg mb-4"
-                                            />
+                const selectedRange = dateRange[room.id] || defaultDateRange
+                const images = roomImages.filter((image) => image.roomId === room.id)
+                return (
+                    <Card key={room.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <div className="relative">
+                            <Carousel className="w-full">
+                                <CarouselContent>
+                                    {images.length > 0 ? (
+                                        images.map((img, index) => (
+                                            <CarouselItem key={index}>
+                                                <div className="relative">
+                                                    <Image
+                                                        src={img.imageUrl || "/placeholder.svg"}
+                                                        alt={img.id}
+                                                        width={300}
+                                                        height={200}
+                                                        className="w-full h-48 object-cover"
+                                                    />
+                                                    <div className="absolute top-2 right-2">
+                                                        <Badge variant="secondary" className="bg-white/90 text-black">
+                                                            {index + 1}/{images.length}
+                                                        </Badge>
+                                                    </div>
+                                                </div>
+                                            </CarouselItem>
                                         ))
-
                                     ) : (
-                                        <p className="text-slate-500 dark:text-slate-400">No images available</p>
-                                    )
-                                }
-                            </CardContent>
-                            <CardFooter>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <button
-                                            id="date-range"
-                                            type="button"
-                                            className={`min-w-[220px] text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
+                                        <CarouselItem>
+                                            <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                                                <p className="text-slate-500 dark:text-slate-400">No images available</p>
+                                            </div>
+                                        </CarouselItem>
+                                    )}
+                                </CarouselContent>
+                                <CarouselPrevious className="left-2" />
+                                <CarouselNext className="right-2" />
+                            </Carousel>
+                        </div>
+
+                        <CardHeader>
+                            <div className="flex justify-between items-start">
+                                <CardTitle className="text-xl">Oda {room.roomNumber}</CardTitle>
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-600">Card Action</div>
+                                </div>
+                            </div>
+                            <CardDescription className="text-gray-600">Card Description</CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <button
+                                        id="date-range"
+                                        type="button"
+                                        className={`min-w-[220px] text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
                                                                           dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!selectedRange?.from || !selectedRange.to
-                                                    ? "text-slate-400 dark:text-slate-500"
-                                                    : "text-slate-800 dark:text-slate-200"
-                                                }`}
-                                        >
-                                            {selectedRange?.from && selectedRange.to
-                                                ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
-                                                : "Tarih Aralığı Seçin"}
-                                        </button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0 mt-2">
-                                        <Calendar
-                                            mode="range"
-                                            selected={selectedRange}
-                                            onSelect={(range) => setDateRange(prev => ({ ...prev, [room.id]: range }))}
-                                            className="rounded-lg border"
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </CardFooter>
-                        </Card>
-                    );
-                })
-            }
+                                                ? "text-slate-400 dark:text-slate-500"
+                                                : "text-slate-800 dark:text-slate-200"
+                                            }`}
+                                    >
+                                        {selectedRange?.from && selectedRange.to
+                                            ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
+                                            : "Tarih Aralığı Seçin"}
+                                    </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 mt-2">
+                                    <Calendar
+                                        mode="range"
+                                        selected={selectedRange}
+                                        onSelect={(range) => setDateRange(prev => ({ ...prev, [room.id]: range }))}
+                                        className="rounded-lg border"
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </CardFooter>
+                    </Card>
+                )
+            })}
         </div>
     )
 }
