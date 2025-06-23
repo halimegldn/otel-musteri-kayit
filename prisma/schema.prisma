@@ -34,12 +34,13 @@ model Stay {
 }
 
 model Room {
-  id         String       @id @default(cuid())
-  roomNumber String
-  stay       Stay?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  RoomImages RoomImages[]
+  id             String       @id @default(cuid())
+  roomNumber     String
+  customerNumber String
+  stay           Stay?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  RoomImages     RoomImages[]
 }
 
 model RoomImages {
