@@ -34,9 +34,19 @@ model Stay {
 }
 
 model Room {
-  id         String   @id @default(cuid())
+  id         String       @id @default(cuid())
   roomNumber String
   stay       Stay?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  RoomImages RoomImages[]
+}
+
+model RoomImages {
+  id        String   @id @default(cuid())
+  roomId    String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  room      Room     @relation(fields: [roomId], references: [id])
 }

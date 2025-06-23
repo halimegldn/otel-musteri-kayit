@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useState } from "react"
-import { createAccomodationAction } from "../actions"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { createStayAction } from "../actions";
 
 export function StayCreate({ avilableRooms, customerId }: { avilableRooms: Room[], customerId: string }) {
-    const [state, formAction] = useActionState((prevState: any, formData: FormData) => createAccomodationAction(customerId, formData), null)
+    const [state, formAction] = useActionState((prevState: any, formData: FormData) => createStayAction(customerId, formData), null)
     const [room, setRoom] = useState<string>("");
     const [selectedRoom, setSelectedRoom] = useState("");
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);

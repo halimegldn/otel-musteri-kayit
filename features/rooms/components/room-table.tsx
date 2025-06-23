@@ -3,13 +3,14 @@
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Room, Stay } from "@/lib/generated/prisma";
+import { Room, RoomImages, Stay } from "@/lib/generated/prisma";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { se } from "date-fns/locale";
+import Image from "next/image";
 
-export function RoomTable({ rooms, stays }: { rooms: Room[], stays: Stay[] }) {
+export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: Stay[]; roomImages: RoomImages[] }) {
 
     const [dateRange, setDateRange] = useState<Record<string, DateRange | undefined>>({})
 
@@ -28,7 +29,7 @@ export function RoomTable({ rooms, stays }: { rooms: Room[], stays: Stay[] }) {
                         : undefined;
 
                     const selectedRange = dateRange[room.id] || defaultDateRange;
-
+                    const images = roomImages.filter((image) => image.roomId === room.id);
                     return (
                         <Card key={room.id} className="w-5/6">
                             <CardHeader>
@@ -38,6 +39,24 @@ export function RoomTable({ rooms, stays }: { rooms: Room[], stays: Stay[] }) {
                             </CardHeader>
                             <CardContent>
                                 <p>{room.roomNumber}</p>
+                                {
+                                    images.length > 0 ? (
+
+                                        images.map((img) => (
+                                            <Image
+                                                key={img.id}
+                                                src={img.imageUrl}
+                                                alt={img.id}
+                                                width={300}
+                                                height={200}
+                                                className="rounded-lg mb-4"
+                                            />
+                                        ))
+
+                                    ) : (
+                                        <p className="text-slate-500 dark:text-slate-400">No images available</p>
+                                    )
+                                }
                             </CardContent>
                             <CardFooter>
                                 <Popover>

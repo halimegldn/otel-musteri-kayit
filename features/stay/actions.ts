@@ -6,7 +6,7 @@ import { StaySchema } from "./schemas";
 import { revalidatePath } from "next/cache";
 
 
-export async function createAccomodationAction(customerId: string, formData: FormData) {
+export async function createStayAction(customerId: string, formData: FormData) {
     console.log("Form Data:", formData);
     const validationFields = StaySchema.safeParse({
         price: formData.get("price"),

@@ -15,6 +15,19 @@ export async function getRooms() {
     }
 }
 
+export async function getRoomImages() {
+    noStore();
+    try {
+        const roomImages = await prisma.roomImages.findMany({
+            orderBy: {
+                createdAt: "desc"
+            }
+        })
+        return roomImages;
+    } catch (error) {
+        console.log("Error fetching room images:", error);
+    }
+}
 export async function getAvailableRooms() {
     noStore();
     try {
