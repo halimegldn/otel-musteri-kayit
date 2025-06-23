@@ -21,16 +21,17 @@ model Customer {
 }
 
 model Stay {
-  id         String    @id @default(cuid())
-  customerId String?
-  customer   Customer? @relation(fields: [customerId], references: [id])
-  price      Float
-  roomId     String?   @unique
-  room       Room?     @relation(fields: [roomId], references: [id])
-  checkin    DateTime
-  checkout   DateTime
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id           String      @id @default(cuid())
+  customerId   String?
+  customer     Customer?   @relation(fields: [customerId], references: [id])
+  price        Float
+  roomId       String?     @unique
+  room         Room?       @relation(fields: [roomId], references: [id])
+  checkin      DateTime
+  checkout     DateTime
+  warningState WarningArea @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model Room {
@@ -50,4 +51,9 @@ model RoomImages {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   room      Room     @relation(fields: [roomId], references: [id])
+}
+
+enum WarningArea {
+  true
+  false
 }

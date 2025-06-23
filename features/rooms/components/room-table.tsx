@@ -7,7 +7,6 @@ import { Room, RoomImages, Stay } from "@/lib/generated/prisma";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
-import { se } from "date-fns/locale";
 import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";

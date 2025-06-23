@@ -2,17 +2,19 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Customer, Room, Stay } from "@/lib/generated/prisma"
+import { WarningArea, type Customer, type Room, type Stay } from "@/lib/generated/prisma"
 import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign, Calendar1Icon } from "lucide-react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useState } from "react"
 import { updateStayAction } from "../actions";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 
 export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customers: Customer[]; rooms: Room[] }) {
@@ -21,6 +23,8 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
     const [stayPrice, setStayPrice] = useState(0);
     const [stayRoomNumber, setStayRoomNumber] = useState("");
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
+    const [warningArea, setWarningArea] = useState<{ [id: string]: boolean }>({});
+    const [manuleState, setManuelState] = useState<{ [id: string]: boolean }>({});
 
     const updateClick = async (customerId: string) => {
         const selectedRoom = rooms.find((room) => room.roomNumber === stayRoomNumber) // roomNumber eğer stayRoomNumber değerine eşitse bul ve selectedRoom'a ata
@@ -43,6 +47,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
         }
     }
 
+
     return (
         <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800/50 dark:to-emerald-900/10 backdrop-blur-sm">
             <Table>
@@ -60,6 +65,7 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tutar</TableHead>
                         <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tarih</TableHead>
+                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda Durumu</TableHead>
                         <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -81,6 +87,15 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                         stays.map((stay) => {
                             const customerName = customers.find((customer) => customer.id === stay.customerId)
                             const roomNumberState = rooms.find((room) => room.id === stay.roomId)
+
+                            const checkoutDate = stay.checkout ?
+                                (new Date(stay.checkout).getTime() - new Date().getTime()) <= (1 * 24 * 60 * 60 * 1000) :
+                                false;
+
+                            // bg red ayarlaması için manuel olarak kapatılmış odalar için
+                            const warningColor = checkoutDate && !manuleState[stay.id];
+
+
                             return (
                                 editStayId === stay.id ? (
                                     <TableRow
@@ -160,8 +175,13 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                     </TableRow>
 
                                 ) : (<TableRow
+
                                     key={stay.id}
-                                    className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
+                                    className={`transition-all duration-300 border-slate-100 dark:border-slate-700
+        hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 
+        dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10
+        ${warningColor ? "bg-red-600 dark:bg-red-400" : ""}
+    `}
                                 >
                                     <TableCell className="font-semibold text-slate-800 dark:text-slate-200">
                                         <div className="flex items-center gap-2">
@@ -224,6 +244,21 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
                                                         : "-"}
                                                 </div>
                                             </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center space-x-2" >
+                                            <Switch
+                                                id={stay.id}
+                                                checked={!manuleState[stay.id] && checkoutDate}
+                                                onCheckedChange={(checked) => {
+                                                    setManuelState((prev) => ({
+                                                        ...prev,
+                                                        [stay.id]: !checked, // checked false ise manuel olarak kapatılmış demek
+                                                    }))
+                                                }}
+                                            />
+                                            <Label htmlFor={`room-status-${stay.id}`}>Oda Durumu</Label>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">
