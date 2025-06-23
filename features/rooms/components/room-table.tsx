@@ -11,6 +11,7 @@ import { se } from "date-fns/locale";
 import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
+import { CalendarIcon } from "lucide-react";
 
 export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: Stay[]; roomImages: RoomImages[] }) {
 
@@ -71,38 +72,23 @@ export function RoomTable({ rooms, stays, roomImages }: { rooms: Room[], stays: 
                         <CardHeader>
                             <div className="flex justify-between items-start">
                                 <CardTitle className="text-xl">Oda {room.roomNumber}</CardTitle>
-                                <div className="text-right">
-                                    <div className="text-2xl font-bold text-green-600">Card Action</div>
-                                </div>
                             </div>
                             <CardDescription className="text-gray-600">Card Description</CardDescription>
                         </CardHeader>
-                        <CardFooter>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <button
-                                        id="date-range"
-                                        type="button"
-                                        className={`min-w-[220px] text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
-                                                                          dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!selectedRange?.from || !selectedRange.to
-                                                ? "text-slate-400 dark:text-slate-500"
-                                                : "text-slate-800 dark:text-slate-200"
-                                            }`}
-                                    >
-                                        {selectedRange?.from && selectedRange.to
-                                            ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
-                                            : "Tarih Aralığı Seçin"}
-                                    </button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0 mt-2">
-                                    <Calendar
-                                        mode="range"
-                                        selected={selectedRange}
-                                        onSelect={(range) => setDateRange(prev => ({ ...prev, [room.id]: range }))}
-                                        className="rounded-lg border"
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                        <CardFooter className="flex flex-col items-start gap-4">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 min-w-[220px]">
+                                <CalendarIcon className="w-4 h-4 text-slate-500" />
+                                <span className="text-sm text-slate-800 dark:text-slate-200">
+                                    {selectedRange?.from && selectedRange.to
+                                        ? `${format(selectedRange.from, "dd.MM.yyyy")} – ${format(selectedRange.to, "dd.MM.yyyy")}`
+                                        : "Tarih Aralığı Yok"}
+                                </span>
+                            </div>
+                            <div className="text-left">
+                                <Badge variant="outline" className="text-xs">
+                                    {room.customerNumber} Kişilik
+                                </Badge>
+                            </div>
                         </CardFooter>
                     </Card>
                 )
