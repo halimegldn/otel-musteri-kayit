@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { WarningArea, type Customer, type Room, type Stay } from "@/lib/generated/prisma"
-import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign, Calendar1Icon } from "lucide-react"
+import { BedDouble, CircleUserRound, Edit, MoreHorizontal, Eye, XCircle, DollarSign, Calendar1Icon, CheckCircle, Star, Clock } from "lucide-react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useState } from "react"
@@ -16,17 +16,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-
 export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customers: Customer[]; rooms: Room[] }) {
-
-    const [editStayId, setEditStayId] = useState<string | null>();
+  const [editStayId, setEditStayId] = useState<string | null>();
     const [stayPrice, setStayPrice] = useState(0);
     const [stayRoomNumber, setStayRoomNumber] = useState("");
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
     const [warningArea, setWarningArea] = useState<{ [id: string]: boolean }>({});
     const [manuleState, setManuelState] = useState<{ [id: string]: boolean }>({});
 
-    const updateClick = async (customerId: string) => {
+const updateClick = async (customerId: string) => {
         const selectedRoom = rooms.find((room) => room.roomNumber === stayRoomNumber) // roomNumber eğer stayRoomNumber değerine eşitse bul ve selectedRoom'a ata
 
         const formData = new FormData();
@@ -46,271 +44,351 @@ export function StayTable({ stays, customers, rooms }: { stays: Stay[]; customer
 
         }
     }
+  return (
+    <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-white/95 to-emerald-50/50 dark:from-slate-800/95 dark:to-emerald-900/20 backdrop-blur-sm shadow-2xl border border-white/20">
+      <Table>
+        <TableCaption className="text-slate-600 dark:text-slate-300 font-medium py-6 bg-gradient-to-r from-emerald-50/50 to-teal-50/50 dark:from-emerald-900/10 dark:to-teal-900/10">
+          <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full animate-pulse"></div>
+              <Star className="h-4 w-4 text-amber-500" />
+              <span className="font-semibold">Toplam {stays.length} konaklama kaydı</span>
+              <Star className="h-4 w-4 text-amber-500" />
+              <div className="w-2 h-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </TableCaption>
 
+        <TableHeader>
+          <TableRow className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 hover:from-emerald-100 hover:to-teal-100 dark:hover:from-emerald-900/40 dark:hover:to-teal-900/40 border-0">
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200 py-4">
+              <div className="flex items-center gap-2">
+                <BedDouble className="h-4 w-4" />
+                Rezervasyon
+              </div>
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200">
+              <div className="flex items-center gap-2">
+                <CircleUserRound className="h-4 w-4" />
+                Müşteri
+              </div>
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200">
+              <div className="flex items-center gap-2">
+                <BedDouble className="h-4 w-4" />
+                Oda
+              </div>
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                Tutar
+              </div>
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200">
+              <div className="flex items-center gap-2">
+                <Calendar1Icon className="h-4 w-4" />
+                Tarih
+              </div>
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 dark:text-slate-200">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4" />
+                Durum
+              </div>
+            </TableHead>
+            <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
+          </TableRow>
+        </TableHeader>
 
-    return (
-        <div className="rounded-xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800/50 dark:to-emerald-900/10 backdrop-blur-sm">
-            <Table>
-                <TableCaption className="text-slate-600 dark:text-slate-300 font-medium py-4">
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div>
-                        Toplam {stays.length} konaklama kaydı bulunmaktadır.
-                        <div className="w-2 h-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"></div>
-                    </div>
-                </TableCaption>
-                <TableHeader>
-                    <TableRow className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 hover:from-emerald-100 hover:to-teal-100 dark:hover:from-emerald-900/30 dark:hover:to-teal-900/30 border-0">
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Konaklama ID</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Müşteri</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tutar</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Tarih</TableHead>
-                        <TableHead className="font-bold text-slate-700 dark:text-slate-200">Oda Durumu</TableHead>
-                        <TableHead className="text-right font-bold text-slate-700 dark:text-slate-200">İşlemler</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {stays.length === 0 ? (
-                        <TableRow>
-                            <TableCell colSpan={6} className="text-center py-12">
-                                <div className="flex flex-col items-center gap-4">
-                                    <div className="p-4 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-full">
-                                        <BedDouble className="h-8 w-8 text-slate-400" />
-                                    </div>
-                                    <p className="text-slate-500 dark:text-slate-400 font-medium">
-                                        Henüz konaklama kaydı bulunmamaktadır.
-                                    </p>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ) : (
-                        stays.map((stay) => {
-                            const customerName = customers.find((customer) => customer.id === stay.customerId)
-                            const roomNumberState = rooms.find((room) => room.id === stay.roomId)
+        <TableBody>
+          {stays.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center py-16">
+                <div className="flex flex-col items-center gap-6">
+                  <div className="p-6 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-full shadow-lg">
+                    <BedDouble className="h-12 w-12 text-slate-400" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xl font-semibold text-slate-600 dark:text-slate-300 mb-2">
+                      Henüz konaklama kaydı bulunmamaktadır
+                    </p>
+                    <p className="text-slate-500 dark:text-slate-400">İlk rezervasyonu oluşturarak başlayın</p>
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            stays.map((stay, index) => {
+              const customerName = customers.find((customer) => customer.id === stay.customerId)
+              const roomNumberState = rooms.find((room) => room.id === stay.roomId)
 
-                            const checkoutDate = stay.checkout ?
-                                (new Date(stay.checkout).getTime() - new Date().getTime()) <= (1 * 24 * 60 * 60 * 1000) :
-                                false;
+              const checkoutDate = stay.checkout
+                ? new Date(stay.checkout).getTime() - new Date().getTime() <= 1 * 24 * 60 * 60 * 1000
+                : false
 
-                            // bg red ayarlaması için manuel olarak kapatılmış odalar için
-                            const warningColor = checkoutDate && !manuleState[stay.id];
+              const warningColor = checkoutDate && !manuleState[stay.id]
 
+              return editStayId === stay.id ? (
+                <TableRow
+                  key={stay.id}
+                  className="bg-gradient-to-r from-emerald-50/80 to-teal-50/80 dark:from-emerald-900/20 dark:to-teal-900/20 border-emerald-200 dark:border-emerald-700"
+                >
+                  <TableCell colSpan={7} className="py-8">
+                    <div className="bg-white/80 dark:bg-slate-800/80 rounded-xl p-6 shadow-lg">
+                      <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <Edit className="h-5 w-5 text-emerald-600" />
+                        Konaklama Düzenle
+                      </h3>
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault()
+                          updateClick(stay.id)
+                        }}
+                        className="space-y-6"
+                      >
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                              <DollarSign className="h-4 w-4" />
+                              Tutar (₺)
+                            </label>
+                            <Input
+                              type="number"
+                              value={stayPrice}
+                              onChange={(e) => setStayPrice(Number(e.target.value))}
+                              className="bg-white/80 dark:bg-slate-800/80 border-slate-200 dark:border-slate-600"
+                              placeholder="0"
+                            />
+                          </div>
 
-                            return (
-                                editStayId === stay.id ? (
-                                    <TableRow
-                                        key={stay.id}
-                                        className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10 transition-all duration-300 border-slate-100 dark:border-slate-700"
-                                    >
-                                        <TableCell colSpan={6} className="py-6">
-                                            <form
-                                                onSubmit={(e) => {
-                                                    e.preventDefault();
-                                                    updateClick(stay.id);
-                                                }}
-                                                className="flex flex-wrap gap-4 items-center justify-between"
-                                            >
-                                                <div className="flex flex-col gap-1">
-                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Tutar (₺)</label>
-                                                    <Input
-                                                        value={stayPrice}
-                                                        onChange={(e) => setStayPrice(Number(e.target.value))}
-                                                        className="w-36"
-                                                    />
-                                                </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                              <BedDouble className="h-4 w-4" />
+                              Oda Numarası
+                            </label>
+                            <Input
+                              value={stayRoomNumber}
+                              onChange={(e) => setStayRoomNumber(e.target.value)}
+                              className="bg-white/80 dark:bg-slate-800/80 border-slate-200 dark:border-slate-600"
+                              placeholder="101"
+                            />
+                          </div>
 
-                                                <div className="flex flex-col gap-1">
-                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Oda Numarası</label>
-                                                    <Input
-                                                        value={stayRoomNumber}
-                                                        onChange={(e) => setStayRoomNumber(e.target.value)}
-                                                        className="w-36"
-                                                    />
-                                                </div>
-
-                                                <div className="flex flex-col gap-1">
-                                                    <label className="text-sm text-slate-600 dark:text-slate-300 font-medium">Tarih Aralığı</label>
-                                                    <Popover>
-                                                        <PopoverTrigger asChild>
-                                                            <button
-                                                                id="date-range"
-                                                                type="button"
-                                                                className={`min-w-[220px] text-left pl-10 pr-3 py-2 rounded-lg border bg-white/50 dark:bg-slate-800/50 border-slate-200
-                                                                          dark:border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-300 ${!dateRange?.from || !dateRange.to
-                                                                        ? "text-slate-400 dark:text-slate-500"
-                                                                        : "text-slate-800 dark:text-slate-200"
-                                                                    }`}
-                                                            >
-                                                                {dateRange?.from && dateRange.to
-                                                                    ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
-                                                                    : "Tarih Aralığı Seçin"}
-                                                            </button>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent className="w-auto p-0 mt-2">
-                                                            <Calendar
-                                                                mode="range"
-                                                                selected={dateRange}
-                                                                onSelect={setDateRange}
-                                                                className="rounded-lg border"
-                                                            />
-                                                        </PopoverContent>
-                                                    </Popover>
-                                                </div>
-
-                                                <div className="flex gap-2 mt-6">
-                                                    <Button
-                                                        type="button"
-                                                        variant="secondary"
-                                                        onClick={() => setEditStayId(null)}
-                                                        className="rounded-lg"
-                                                    >
-                                                        İptal
-                                                    </Button>
-                                                    <Button type="submit" className="rounded-lg">
-                                                        Kaydet
-                                                    </Button>
-                                                </div>
-                                            </form>
-                                        </TableCell>
-                                    </TableRow>
-
-                                ) : (<TableRow
-
-                                    key={stay.id}
-                                    className={`transition-all duration-300 border-slate-100 dark:border-slate-700
-        hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/50 
-        dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10
-        ${warningColor ? "bg-red-600 dark:bg-red-400" : ""}
-    `}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                              <Calendar1Icon className="h-4 w-4" />
+                              Tarih Aralığı
+                            </label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className={`w-full justify-start text-left font-normal bg-white/80 dark:bg-slate-800/80 ${
+                                    !dateRange?.from || !dateRange.to
+                                      ? "text-slate-400 dark:text-slate-500"
+                                      : "text-slate-800 dark:text-slate-200"
+                                  }`}
                                 >
-                                    <TableCell className="font-semibold text-slate-800 dark:text-slate-200">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">
-                                                #
-                                            </div>
-                                            #{stay.id.substring(0, 8)}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg">
-                                                <CircleUserRound className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                            </div>
-                                            <div>
-                                                <div className="font-semibold text-slate-800 dark:text-slate-200">
-                                                    {customerName?.name} {customerName?.surname}
-                                                </div>
-                                                <div className="text-sm text-slate-500 dark:text-slate-400">Müşteri</div>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-lg">
-                                                <BedDouble className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                            </div>
-                                            <div>
-                                                <div className="font-semibold text-slate-800 dark:text-slate-200">
-                                                    Oda {roomNumberState?.roomNumber}
-                                                </div>
-                                                <div className="text-sm text-slate-500 dark:text-slate-400">Standart</div>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <div className="p-1 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded">
-                                                <DollarSign className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                                            </div>
-                                            <span className="font-bold text-lg bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
-                                                ₺{stay.price?.toLocaleString()}
-                                            </span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-lg">
-                                                <Calendar1Icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <div className="font-semibold text-slate-800 dark:text-slate-200">
-                                                    {stay.checkin
-                                                        ? format(new Date(stay.checkin), "dd.MM.yyyy")
-                                                        : "-"}
-                                                </div>
-                                                <div className="text-sm text-slate-500 dark:text-slate-400">
-                                                    {stay.checkout
-                                                        ? format(new Date(stay.checkout), "dd.MM.yyyy")
-                                                        : "-"}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center space-x-2" >
-                                            <Switch
-                                                id={stay.id}
-                                                checked={!manuleState[stay.id] && checkoutDate}
-                                                onCheckedChange={(checked) => {
-                                                    setManuelState((prev) => ({
-                                                        ...prev,
-                                                        [stay.id]: !checked, // checked false ise manuel olarak kapatılmış demek
-                                                    }))
-                                                }}
-                                            />
-                                            <Label htmlFor={`room-status-${stay.id}`}>Oda Durumu</Label>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="hover:bg-gradient-to-r hover:from-slate-100 hover:to-slate-200 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300"
-                                                >
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                    <span className="sr-only">İşlemler</span>
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                align="end"
-                                                className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-slate-200 dark:border-slate-700"
-                                            >
-                                                <DropdownMenuLabel className="text-slate-700 dark:text-slate-200 font-semibold">
-                                                    İşlemler
-                                                </DropdownMenuLabel>
-                                                <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
-                                                <DropdownMenuItem
+                                  <Calendar1Icon className="mr-2 h-4 w-4" />
+                                  {dateRange?.from && dateRange.to
+                                    ? `${format(dateRange.from, "dd.MM.yyyy")} – ${format(dateRange.to, "dd.MM.yyyy")}`
+                                    : "Tarih seçin"}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0 mt-2">
+                                <Calendar
+                                  mode="range"
+                                  selected={dateRange}
+                                  onSelect={setDateRange}
+                                  className="rounded-lg border"
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                        </div>
 
-                                                    onClick={() => {
-                                                        setEditStayId(stay.id);
-                                                        setStayPrice(stay.price);
-                                                        setStayRoomNumber(roomNumberState?.roomNumber || "");
-                                                    }}
+                        <div className="flex gap-3 pt-4">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setEditStayId(null)}
+                            className="bg-white/80 hover:bg-slate-50"
+                          >
+                            İptal
+                          </Button>
+                          <Button
+                            type="submit"
+                            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg"
+                          >
+                            Kaydet
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow
+                  key={stay.id}
+                  className={`transition-all duration-300 border-slate-100 dark:border-slate-700 group
+                                            hover:bg-gradient-to-r hover:from-emerald-50/30 hover:to-teal-50/30 
+                                            dark:hover:from-emerald-900/10 dark:hover:to-teal-900/10
+                                            ${warningColor ? "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20" : ""}
+                                        `}
+                >
+                  <TableCell className="py-4">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                          #{index + 1}
+                        </div>
+                        {warningColor && (
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white">
+                            <Clock className="h-2 w-2 text-white m-0.5" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
+                          #{stay.id.substring(0, 8)}
+                        </div>
+                        <Badge
+                          variant="secondary"
+                          className="text-xs bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                        >
+                          Rezervasyon
+                        </Badge>
+                      </div>
+                    </div>
+                  </TableCell>
 
-                                                    className="hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-700 dark:text-slate-200">
-                                                    <Edit className="mr-2 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                                                    Düzenle
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem className="hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-700 dark:text-slate-200">
-                                                    <Eye className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                                    Müşteriyi Görüntüle
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                    <XCircle className="mr-2 h-4 w-4" />
-                                                    İptal Et
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>)
+                  <TableCell>
+                    <div className="flex items-center gap-4 p-3 rounded-lg bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20 group-hover:from-blue-100/50 group-hover:to-purple-100/50 transition-all duration-300">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                        {customerName?.name?.charAt(0)}
+                        {customerName?.surname?.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
+                          {customerName?.name} {customerName?.surname}
+                        </div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">Müşteri</div>
+                      </div>
+                    </div>
+                  </TableCell>
 
-                            )
-                        })
-                    )}
-                </TableBody>
-            </Table>
-        </div >
-    )
+                  <TableCell>
+                    <div className="flex items-center gap-4 p-3 rounded-lg bg-gradient-to-r from-emerald-50/50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/20 group-hover:from-emerald-100/50 group-hover:to-teal-100/50 transition-all duration-300">
+                      <div className="p-2 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg">
+                        <BedDouble className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
+                          Oda {roomNumberState?.roomNumber}
+                        </div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">Deluxe</div>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-amber-50/50 to-orange-50/50 dark:from-amber-900/20 dark:to-orange-900/20 group-hover:from-amber-100/50 group-hover:to-orange-100/50 transition-all duration-300">
+                      <div className="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-lg">
+                        <DollarSign className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
+                          ₺{stay.price?.toLocaleString()}
+                        </div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">Toplam</div>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-4 p-3 rounded-lg bg-gradient-to-r from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 group-hover:from-blue-100/50 group-hover:to-cyan-100/50 transition-all duration-300">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                        <Calendar1Icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
+                          {stay.checkin ? format(new Date(stay.checkin), "dd.MM.yyyy") : "-"}
+                        </div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">
+                          {stay.checkout ? format(new Date(stay.checkout), "dd.MM.yyyy") : "-"}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 group-hover:from-purple-100/50 group-hover:to-pink-100/50 transition-all duration-300">
+                      <Switch
+                        id={stay.id}
+                        checked={!manuleState[stay.id] && checkoutDate}
+                        onCheckedChange={(checked) => {
+                          setManuelState((prev) => ({
+                            ...prev,
+                            [stay.id]: !checked,
+                          }))
+                        }}
+                        className="data-[state=checked]:bg-emerald-500"
+                      />
+                      <Label htmlFor={stay.id} className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        {warningColor ? "Çıkış Yakın" : "Aktif"}
+                      </Label>
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hover:bg-gradient-to-r hover:from-slate-100 hover:to-slate-200 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300 rounded-full"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">İşlemler</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="end"
+                        className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-slate-200 dark:border-slate-700 shadow-xl rounded-xl"
+                      >
+                        <DropdownMenuLabel className="text-slate-700 dark:text-slate-200 font-semibold px-4 py-2">
+                          Konaklama İşlemleri
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setEditStayId(stay.id)
+                            setStayPrice(stay.price)
+                            setStayRoomNumber(roomNumberState?.roomNumber || "")
+                          }}
+                          className="hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-700 dark:text-slate-200 rounded-lg mx-1"
+                        >
+                          <Edit className="mr-3 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                          Düzenle
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-700 dark:text-slate-200 rounded-lg mx-1">
+                          <Eye className="mr-3 h-4 w-4 text-blue-600 dark:text-blue-400" />
+                          Müşteriyi Görüntüle
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg mx-1">
+                          <XCircle className="mr-3 h-4 w-4" />
+                          İptal Et
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              )
+            })
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  )
 }
