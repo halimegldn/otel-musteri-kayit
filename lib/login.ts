@@ -42,3 +42,39 @@ export async function LoginAction(formData: FormData) {
         return { error: "Beklenmeyen bir hata oluştu." };
     }
 }
+
+export default async function CreateUserAction(prevState: any, formData: FormData) {
+    const validation = LoginSchema.safeParse({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+    })
+
+    if (!validation.success) {
+        return {
+            error: validation.error.flatten().fieldErrors,
+            message: "Lütfen formu doğru doldurun.",
+        }
+    };
+
+    const { name, email, password } = validation.data;
+
+    try {
+        await prisma.user.create({
+            data: {
+                name,
+                email,
+                password: password,
+            }
+        })
+        return {
+            success: true,
+            message: "Kayıt başarılı, yönlendiriliyorsunuz."
+        };
+
+
+    } catch (error) {
+        console.log("error", error);
+
+    }
+}
