@@ -15,10 +15,9 @@ export function ReportComponent({ customers }: { customers: Customer[] }) {
     );
 
     // Aynı tarihte gelen müşterileri sayar
-    rawDates.forEach((sayi) => {
+    rawDates.map((sayi) => {
         count[sayi] = (count[sayi] || 0) + 1;
     })
-
 
     // Countı grafik için { date, sayi } objelerine dönüştürür
     const data = Object.entries(count).map((([date, sayi]) => ({
