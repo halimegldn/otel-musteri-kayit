@@ -51,3 +51,13 @@ export async function getCustomerById(id: string) {
         throw new Error("Customer not found");
     }
 }
+
+// export async function getCustomerLength() {
+//     noStore();
+//     const customersLength = prisma.customer.findMany({
+//         orderBy: {
+//             createdAt: "desc",
+//         }
+//     })
+//     const total = (await customersLength).length;
+// }

@@ -30,7 +30,7 @@ export function Navbar() {
                         <Link href="/project/rooms" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Odalar
                         </Link>
-                        <Link href="#" className="text-md text-muted-foreground hover:text-foreground transition-colors">
+                        <Link href="/project/report" className="text-md text-muted-foreground hover:text-foreground transition-colors">
                             Rapor
                         </Link>
                     </div>
